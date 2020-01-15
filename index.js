@@ -29,11 +29,15 @@ $(function(){
        var busqueda = $(this)
        .find('input[type="text"]')
        .val();
+
+       $tvShowsContainer.find('.tv-show').remove()
+       var $loader =  $('<div class="loader">');
+       $loader.appendTo($tvShowsContainer);
        $.ajax({
            url:'http://api.tvmaze.com/search/shows',
            data:{q: busqueda},
            success: function(res, textStatus, xhr){
-                $tvShowsContainer.find('.tv-show').remove()
+               $loader.remove();
                 var shows = res.map(function(el){
                     return el.show;
                 })  
