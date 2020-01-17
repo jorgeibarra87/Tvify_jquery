@@ -7,7 +7,8 @@ $(function(){
     var $tvShowsContainer = $('#app-body').find('.tv-shows');
     
     function renderShows(shows){
-        shows.forEach(function(show){
+        $tvShowsContainer.find('.loader').remove();
+        shows.forEach(function(show){ 
             var article = template
             .replace(':name:', show.name)
             .replace(':img:', show.image.medium)
@@ -57,9 +58,15 @@ $(function(){
     '</div>'+
     '</article>';
 
-    $.ajax('http://api.tvmaze.com/shows')
+    if(!localStorage.shows){
+        $.ajax('http://api.tvmaze.com/shows')
         .then(function (shows){
         $tvShowsContainer.find('.loader').remove();
+        localStorage.shows = JSON.stringify(shows);
         renderShows(shows);
-    })
+        })
+    } else{
+        renderShows(JSON.parse(localStorage.shows));
+    }
+    
 })
